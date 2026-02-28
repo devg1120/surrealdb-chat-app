@@ -1,0 +1,161 @@
+/* app/globals.css */
+
+/* Tailwind CSS v4 base import */
+@import "tailwindcss";
+
+/* Hide Next.js development mode indicator */
+div[data-nextjs-toast] {
+  display: none !important;
+}
+
+/* Hide other Turbopack/Next.js development tools */
+div[data-nextjs-portal] {
+  display: none !important;
+}
+
+#__next-build-watcher,
+.__next-build-watcher {
+  display: none !important;
+}
+
+/* custom scroll bar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+/* Smooth scrolling of messages */
+.chat-container {
+  scroll-behavior: smooth;
+}
+
+/* Animation when input field is focused */
+input:focus {
+  transform: scale(1.01);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Message display animation */
+@keyframes messageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-enter {
+  animation: messageSlideIn 0.3s ease-out;
+}
+
+/* Connection status indicator */
+.connection-indicator {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+/* Loading spinner */
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Button hover effect - Tailwind v4 compatible */
+.btn-primary {
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+  transform-origin: center;
+}
+
+.btn-primary:hover {
+  background-color: #2563eb;
+  transform: scale(1.05);
+}
+
+.btn-primary:active {
+  transform: scale(0.95);
+}
+
+.btn-secondary {
+  background-color: #6b7280;
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+/* Responsive chat layout */
+@media (max-width: 768px) {
+  .chat-container {
+    height: 100vh;
+    height: 100dvh; /* Mobile browser support */
+  }
+  
+  .message-bubble {
+    max-width: 85%;
+  }
+}
+
+/* Dark mode support (for future expansion) */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: #1f2937;
+    color: #f9fafb;
+  }
+  
+  .dark-mode .message-bubble {
+    background-color: #374151;
+  }
+}
+
+/* Accessibility: Reduce motion support */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
