@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { Surreal } from 'surrealdb';
+import { Surreal, Table } from 'surrealdb';
 
 
 const db = new Surreal();
@@ -21,6 +21,7 @@ function  App() {
 
   const [count, setCount] = useState(0)
   const [users, setUsers] = useState([]);
+  const [update, setUpdate] = useState(0);
 
     useEffect(() => {
         const access_db = async () => {
@@ -28,7 +29,7 @@ function  App() {
 	    setUsers(result);
         };
         access_db();
-    }, []);
+    }, [update]);
 
 
   const users_ = [
@@ -40,8 +41,26 @@ function  App() {
   console.log(users);
   console.log(users_);
 
+  const handleClick = async ()=> {
+    //alert('You clicked me!');
+    const users = new Table('users');
+    let user = await db.create(users).content({
+    	name: 'AAAA',
+    	email: 'aaa@example.com',
+    	age: 1000
+    });
+    console.log(user);
+    setUpdate(update + 1);
+
+  }
+  const handleGets = ()=> {
+    //alert('You clicked Gets!');
+    setUpdate(update + 1);
+  }
+
   return (
     <>
+    {/*
       <div>
         <a href="https://vite.dev" target="_blank">
           <img src={viteLogo} className="logo" alt="Vite logo" />
@@ -51,6 +70,15 @@ function  App() {
         </a>
       </div>
       <h1>Vite + React</h1>
+*/}
+
+    <button onClick={handleClick}>
+      insert
+    </button>
+    <button onClick={handleGets}>
+      gets
+    </button>
+
       <div className="card">
         <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
