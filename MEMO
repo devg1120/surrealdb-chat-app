@@ -1,0 +1,14 @@
+
+https://stackoverflow.com/questions/73720759/
+
+https://surrealdb.com/docs/surrealdb/cli
+
+
+curl -sSf https://install.surrealdb.com | sh
+
+PATH=/home/devg1120/.surrealdb:$PATH
+
+$ surreal help
+
+$ surreal sql --username root --password root --pretty
+

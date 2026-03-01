@@ -1,0 +1,36 @@
+
+https://stackoverflow.com/questions/73720759/
+
+https://surrealdb.com/docs/surrealdb/cli
+
+# surreal install
+curl -sSf https://install.surrealdb.com | sh
+
+PATH=/home/devg1120/.surrealdb:$PATH
+
+$ surreal help
+
+$ surreal sql --username root --password root --pretty
+
+--------------------------------------------------------
+https://zenn.dev/ten_takano/articles/20230501-surrealdb
+
+
+$ node -v
+
+$ docker run --rm -p 8000:8000 surrealdb/surrealdb:latest start --user root --pass root  memory
+
+
+$ curl http://localhost:8000/version
+surrealdb-3.0.1test_surrealdb
+
+
+$ nvm 22
+$ node -v
+$ node app.js
+
+
+
+
+
+
