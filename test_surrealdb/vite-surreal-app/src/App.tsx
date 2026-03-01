@@ -22,6 +22,7 @@ function  App() {
   const [count, setCount] = useState(0)
   const [users, setUsers] = useState([]);
   const [update, setUpdate] = useState(0);
+  const [subsct, setSubsct] = useState(0);
 
     useEffect(() => {
         const access_db = async () => {
@@ -29,7 +30,7 @@ function  App() {
 	    setUsers(result);
         };
         access_db();
-    }, [update]);
+    }, [update, subsct]);
 
 
   const users_ = [
@@ -41,7 +42,18 @@ function  App() {
   console.log(users);
   console.log(users_);
 
-  const handleClick = async ()=> {
+
+  const sub = async ()=> {
+      const subscription = await db.live(new Table('users'));
+      
+      for await (const update of subscription) {
+          console.log('Update:', update.action, update.result);
+          setSubsct(subsct + 1);
+      }
+  }
+  sub();
+
+  const handleInsert = async ()=> {
     //alert('You clicked me!');
     const users = new Table('users');
     let user = await db.create(users).content({
@@ -51,11 +63,21 @@ function  App() {
     });
     console.log(user);
     setUpdate(update + 1);
-
   }
   const handleGets = ()=> {
     //alert('You clicked Gets!');
     setUpdate(update + 1);
+  }
+  const handleDeleteAll = async ()=> {
+    //alert('You clicked Gets!');
+    //setUpdate(update + 1);
+    //const deleted = await db.delete(new Table('users'))
+    //.timeout(Duration.parse('10s'));
+
+    const users = new Table('users');
+    let user = await db.delete(users)
+    setUpdate(0);
+    console.log("++++++++++")
   }
 
   return (
@@ -72,11 +94,14 @@ function  App() {
       <h1>Vite + React</h1>
 */}
 
-    <button onClick={handleClick}>
+    <button onClick={handleInsert}>
       insert
     </button>
     <button onClick={handleGets}>
       gets
+    </button>
+    <button onClick={handleDeleteAll}>
+      deleteAll
     </button>
 
       <div className="card">
