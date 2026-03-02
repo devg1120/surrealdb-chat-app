@@ -57,7 +57,7 @@ if False:
    pprint.pprint(users)
 
 
-if False:
+if True:
    user = db.create("users", {
    #user = db.insert("users", {
        "name": "Python",
