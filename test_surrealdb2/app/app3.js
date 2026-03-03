@@ -1,0 +1,70 @@
+import { Surreal }  from 'surrealdb';
+import { Table, RecordId, eq } from 'surrealdb';
+
+
+
+const db = new Surreal();
+
+await db.connect('ws://localhost:8000', {
+	namespace: "gusa",
+	database: "dbtest",
+	authentication: {
+		username: 'root',
+		password: 'root'
+	}
+});
+
+const info = await db.version();
+console.log("version:", info.version); // "surrealdb-3.0.1"
+
+
+//  Defining your tables
+const users = new Table('users');
+const products = new Table('products');
+
+const user = await db.create(users).content({
+	name: 'John',
+	email: 'john@example.com',
+	age: 32
+});
+
+try {
+   const appleId = new RecordId(products, 'apple');
+   const product = await db.create(appleId).content({
+   	name: 'Apple',
+   	price: 1.50,
+   	category: 'fruit'
+   });
+} catch(e) {
+   console.log("prodacts  Apple exist!!");
+}
+const apple = await db.select(new RecordId(products, 'apple'));
+
+// Select specific fields with filtering
+const results = await db.select(products)
+	.fields('name', 'price')
+	.where(eq("category", "fruit"))
+	.limit(10);
+
+//console.log(user);
+// Select all users
+const allusers = await db.select(users);
+
+console.log(allusers[allusers.length-1]);
+console.log("length:", allusers.length);
+
+
+//const [cheapProducts] = await db.query<[{ name: string; price: number }[]]>(
+const [cheapProducts] = await db.query(
+	'SELECT name, price FROM products WHERE price < $max_price ORDER BY price',
+	{ max_price: 5.00 }
+);
+
+console.log(cheapProducts);
+
+// Time functions
+const now = await db.run('time::now');
+console.log('Current time:', now);
+
+db.close();
+
