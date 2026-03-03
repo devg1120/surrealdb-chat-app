@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { Surreal, Table , RecordId} from 'surrealdb';
+import { Surreal, Table } from 'surrealdb';
 
 
 const db = new Surreal();
@@ -40,7 +40,7 @@ function  App() {
   ];
 
   console.log(users);
-  //console.log(users_);
+  console.log(users_);
 
 
   const sub = async ()=> {
@@ -53,7 +53,7 @@ function  App() {
   }
   sub();
 
-  const handleCreate = async ()=> {
+  const handleInsert = async ()=> {
     //alert('You clicked me!');
     const users = new Table('users');
     let user = await db.create(users).content({
@@ -64,39 +64,16 @@ function  App() {
     console.log(user);
     setUpdate(update + 1);
   }
-
-  const handleInsert = async ()=> {
-     const users = await db.insert([
-       { id: new RecordId('users', 'bob'), name: 'Bob' , email: 'bob@gmail.com', age:10},
-       { id: new RecordId('users', 'carol'), name: 'Carol'  ,email: ' carol@gmail.com',age: 11}
-]);
-     setUpdate(update + 1);
-  }
-
-  const handleUpdate = async ()=> {
-
-     const user = await db.update(new RecordId('users', 'bob'))
-      .content({ name: 'John Smith', email: 'john@example.com' , age: 99});
-
-     setUpdate(update + 1);
-  }
-
-  const handleMerge = async ()=> {
-     const user = await db.update(new RecordId('users', 'bob'))
-      .merge({ age: 100});
-     setUpdate(update + 1);
-  }
-
-  const handleDelete = async ()=> {
-     const user = await db.delete(new RecordId('users', 'bob'));
-     setUpdate(update + 1);
-  }
   const handleGets = ()=> {
     //alert('You clicked Gets!');
     setUpdate(update + 1);
   }
-
   const handleDeleteAll = async ()=> {
+    //alert('You clicked Gets!');
+    //setUpdate(update + 1);
+    //const deleted = await db.delete(new Table('users'))
+    //.timeout(Duration.parse('10s'));
+
     const users = new Table('users');
     let user = await db.delete(users)
     setUpdate(0);
@@ -117,23 +94,11 @@ function  App() {
       <h1>Vite + React</h1>
 */}
 
-    <button onClick={handleCreate}>
-      create
-    </button>
     <button onClick={handleInsert}>
-     insert 
-    </button>
-    <button onClick={handleUpdate}>
-     update
-    </button>
-    <button onClick={handleMerge}>
-      merge
+      insert
     </button>
     <button onClick={handleGets}>
       gets
-    </button>
-    <button onClick={handleDelete}>
-      delete
     </button>
     <button onClick={handleDeleteAll}>
       deleteAll
@@ -154,7 +119,6 @@ function  App() {
     <table style={{ width: '100%', borderCollapse: 'collapse' }}>
       <thead>
         <tr>
-          <th style={{ border: '1px solid black', padding: '8px' }}>ID</th>
           <th style={{ border: '1px solid black', padding: '8px' }}>NAME</th>
           <th style={{ border: '1px solid black', padding: '8px' }}>EMAIL</th>
           <th style={{ border: '1px solid black', padding: '8px' }}>AGE</th>
@@ -164,7 +128,6 @@ function  App() {
         {/* 2. .map() でデータ行を生成 */}
         {users.map((item) => (
           <tr key={item.id}>
-            <td style={{ border: '1px solid black', padding: '8px' }}>{String(item.id)}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>{item.name}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>{item.email}</td>
             <td style={{ border: '1px solid black', padding: '8px' }}>{item.age}</td>

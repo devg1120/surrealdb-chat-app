@@ -53,7 +53,7 @@ if True:
    #print(result)
    pprint.pprint(result)
 
-if True:
+if False:
    users = db.select("users")
    #print(users)
    pprint.pprint(users)
@@ -67,6 +67,7 @@ if False:
        "age": 18,
    })
 
+#if True:
 if False:
                               # table    id
    user = db.create(RecordID("users","python"), {  # create by id
@@ -76,8 +77,17 @@ if False:
        "age": 18,
    }) 
 
-if True:
+#if True:
+if False:
    result = db.update(RecordID("users", 'python'), {  # update by id
+       "name": "John Doe2",
+       "email": "john.doe@example.com",
+   })
+   print("update", result)
+
+if True:
+#if False:
+   result = db.merge(RecordID("users", 'python'), {  # update by id
        "name": "John Doe2",
        "email": "john.doe@example.com",
    })
@@ -90,9 +100,10 @@ if False:
    })
    print("update", result)
 
-if False:
+if True:
    result = db.query("SELECT * FROM users")
-   print(">>>",result)
+   print(">>>")
+   pprint.pprint(result)
 
 if False:
    query_uuid = db.live("users")
