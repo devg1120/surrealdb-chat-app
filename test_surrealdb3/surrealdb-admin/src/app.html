@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
+		<meta name="viewport" content="width=device-width" />
+		%sveltekit.head%
+		<style>
+			body, html {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+				color: var(--sapTextColor);
+				background-color: var(--sapBackgroundColor);
+			}
+		</style>
+	</head>
+	<div class="app-container">
+		<body data-sveltekit-preload-data="hover">%sveltekit.body% </body>
+	</div>
+</html>
