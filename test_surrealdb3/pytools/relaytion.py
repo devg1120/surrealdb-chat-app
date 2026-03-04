@@ -36,21 +36,28 @@ SELECT * FROM player FETCH armor;
 
 ql_13 = """
 SELECT * FROM wants_to_buy;
+"""
+ql_14 = """
 SELECT id, -> wants_to_buy -> armor AS wtb FROM player;
+"""
+ql_15 = """
 SELECT id, <- wants_to_buy <- player AS players FROM armor:dragon
 """
-def main():
-   #script_name = os.path.basename(__file__)
 
-   #if len(sys.argv) != 2:
-   #    print( "Usage: python " + script_name + " <file-path> ")
-   #    sys.exit(1)
-   
-   #path = sys.argv[1]
-   
-   #f = open(path)
-   #surql = f.read()
-   
+# https://surrealdb.com/docs/surrealql/statements/relate
+
+ql_21 = """
+CREATE person:aristotle, article:on_sleep_and_sleeplessness;
+"""
+ql_22 = """
+RELATE person:aristotle->wrote->article:on_sleep_and_sleeplessness;
+"""
+
+ql_23 = """
+SELECT * FROM wrote;
+"""
+
+def main():
    db = Surreal("ws://localhost:8000")
    db.use("gusa", "dbtest")
    db.signin({"username": "root", "password": "root"})
@@ -65,6 +72,16 @@ def main():
    print("グラフコネクション-------------------")
    print("")
    result = query(db, ql_13); pprint.pprint(result)
+   print("")
+   result = query(db, ql_14); pprint.pprint(result)
+   print("")
+   result = query(db, ql_15); pprint.pprint(result)
+   print("")
+   result = query(db, ql_21); 
+   print("")
+   result = query(db, ql_22); pprint.pprint(result)
+   print("")
+   result = query(db, ql_23); pprint.pprint(result)
 
    #result = query(db, 'INFO FOR DB;')
    #pprint.pprint(result)
