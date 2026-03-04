@@ -1,5 +1,5 @@
 #docker run --rm -p 8000:8000 surrealdb/surrealdb:v2.6.0 start --user root --pass root
-docker run --rm -p 8000:8000 surrealdb/surrealdb:latest start --user root --pass root  memory
+docker run --rm -p 8000:8000 surrealdb/surrealdb:latest start --allow-all --user root --pass root  memory
 
 # docker pull surrealdb/surrealdb:latest
 # docker run --name surreal -d -p 8000:8000 surrealdb/surrealdb:latest start --user root --pass root
