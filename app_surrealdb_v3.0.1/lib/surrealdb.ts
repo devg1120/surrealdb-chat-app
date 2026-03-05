@@ -1,4 +1,4 @@
-import { Surreal, RecordId } from 'surrealdb';
+import { Surreal, Table, RecordId } from 'surrealdb';
 
 export interface ChatMessage {
   id?: RecordId<string> | string;
@@ -100,6 +100,7 @@ class SurrealDBService {
   }
 
   private async initializeSchema() {
+	  console.log("initializeSchema");
     try {
       // A simpler approach: attempt table creation and catch errors
       await this.db.query(`
@@ -128,13 +129,25 @@ class SurrealDBService {
       throw new Error('Database not connected');
     }
 
+    const info = await this.db.version();
+    console.log("version:", info.version); // "surrealdb-3.0.1"
+
     try {
+      console.log("sendMessage", username, message);
+/*
       const result = await this.db.create('messages', {
         username,
         message,
         timestamp: new Date()
       });
-
+*/
+      const messages = new Table('messages');
+      const result = await this.db.create(messages).content({
+        username: username,
+        message: message,
+        timestamp: new Date()
+      });
+      console.log(result)
       return Array.isArray(result) ? result as ChatMessage[] : [result as ChatMessage];
     } catch (error) {
       console.error('Failed to send message:', error instanceof Error ? error.message : String(error));
@@ -143,12 +156,16 @@ class SurrealDBService {
   }
 
   async getMessages(limit: number = 50): Promise<ChatMessage[]> {
+    console.log("getMessages");
+
     if (!this.connected) {
       throw new Error('Database not connected');
     }
 
     try {
-      const result = await this.db.select('messages');
+      //const result = await this.db.select('messages');
+      const messages = new Table('messages');
+      const result = await this.db.select(messages);
       
       if (result && Array.isArray(result)) {
         const messages = result as ChatMessage[];
@@ -169,15 +186,29 @@ class SurrealDBService {
       throw new Error('Database not connected');
     }
 
+	      console.log("subsc");
     try {
+	    
       // Use SurrealDB's live query to monitor real-time updates
       const queryUuid = await this.db.live('messages', (action, result) => {
+	      console.log("live");
         if (action === 'CREATE' && result) {
+	     console.log("CREATE");
           callback(result as ChatMessage);
         }
       });
 
       return queryUuid.toString();
+
+
+/*
+const subscription = await this.db.live(new Table('messages'));
+
+for await (const update of subscription) {
+    console.log('Update:', update.action, update.result);
+}
+    return subscription.toString();
+*/
     } catch (error) {
       console.error('Failed to subscribe to messages:', error instanceof Error ? error.message : String(error));
       throw error;

@@ -143,6 +143,7 @@ class SurrealDBService {
   }
 
   async getMessages(limit: number = 50): Promise<ChatMessage[]> {
+	  console.log("getMessages");
     if (!this.connected) {
       throw new Error('Database not connected');
     }
@@ -173,6 +174,7 @@ class SurrealDBService {
       // Use SurrealDB's live query to monitor real-time updates
       const queryUuid = await this.db.live('messages', (action, result) => {
         if (action === 'CREATE' && result) {
+		console.log("CREATE");
           callback(result as ChatMessage);
         }
       });

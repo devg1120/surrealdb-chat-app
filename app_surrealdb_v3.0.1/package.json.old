@@ -13,7 +13,7 @@
     "next": "^16.1.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "surrealdb": "^2.0.0",
+    "surrealdb": "2.0.0",
     "ws": "^8.19.0"
   },
   "devDependencies": {
