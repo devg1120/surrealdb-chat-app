@@ -8,7 +8,8 @@ const db = new Surreal();
 //console.log("version:", info_.version); // "surrealdb-3.0.1"
 
 // Connecting as system user
-await db.connect('ws://localhost:8000', {
+//await db.connect('ws://localhost:8000', {
+await db.connect('http://localhost:8000', {
 	namespace: "gusa",
 	database: "dbtest",
 	authentication: {
