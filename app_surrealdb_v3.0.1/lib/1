@@ -190,7 +190,6 @@ class SurrealDBService {
     try {
 	    
       // Use SurrealDB's live query to monitor real-time updates
-/*
       const queryUuid = await this.db.live('messages', (action, result) => {
 	      console.log("live");
         if (action === 'CREATE' && result) {
@@ -198,56 +197,18 @@ class SurrealDBService {
           callback(result as ChatMessage);
         }
       });
-*/
-const live = await this.db.live(new Table('messages'));
 
-
-//https://surrealdb.com/docs/sdk/javascript/concepts/live-queries#:~:text=JavaScript%20%7C%20SDK%20%7C%20Live%20queries
-//
-/*
-live.subscribe((action, result, record) => {
-     console.log("callback", action, result, record);
-        if (action === 'CREATE' && result) {
-	     console.log("CREATE");
-          callback(result as ChatMessage);
-        }
-})
-*/
-
-live.subscribe((data) => {
-     console.log("callback", data);
-        if (data.action === 'CREATE' && data.value) {
-	     console.log("CREATE");
-          callback(data.value as ChatMessage);
-        }
-})
-console.log(live)
-/*
-      const queryUuid = await this.db.live('messages');
-
-      //await surreal.subscribeLive(queryUuid, (action, result) => {
-      await this.db.subscribeLive(queryUuid, (action, result) => {
-	      console.log("live");
-        if (action === 'CREATE' && result) {
-	     console.log("CREATE");
-          callback(result as ChatMessage);
-        }
-      });
-*/
-
-      return live.toString();
+      console.log(queryUuid.toString());
+      return queryUuid.toString();
 
 
 /*
 const subscription = await this.db.live(new Table('messages'));
 
-for  await (const update of subscription) {
+for await (const update of subscription) {
     console.log('Update:', update.action, update.result);
 }
-
-     console.log("-------------");  
-    //return subscription.toString();
-    return subscription;
+    return subscription.toString();
 */
     } catch (error) {
       console.error('Failed to subscribe to messages:', error instanceof Error ? error.message : String(error));
