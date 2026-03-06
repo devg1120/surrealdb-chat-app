@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { surrealDB, ChatMessage } from '@/lib/surrealdb';
+import { useState, useEffect, useRef } from "react";
+import { surrealDB, ChatMessage } from "@/lib/surrealdb";
 
 export default function Chat() {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [newMessage, setNewMessage] = useState('');
-  const [username, setUsername] = useState('');
+  const [newMessage, setNewMessage] = useState("");
+  const [username, setUsername] = useState("");
   const [isConnected, setIsConnected] = useState(false);
   const [isJoined, setIsJoined] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -15,7 +15,7 @@ export default function Chat() {
 
   // Scroll to the bottom of the message list
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Initialize SurrealDB connection
@@ -30,7 +30,10 @@ export default function Chat() {
         const existingMessages = await surrealDB.getMessages();
         setMessages(existingMessages);
       } catch (error) {
-        console.error('Connection error:', error instanceof Error ? error.message : String(error));
+        console.error(
+          "Connection error:",
+          error instanceof Error ? error.message : String(error),
+        );
         setIsConnected(false);
       } finally {
         setLoading(false);
@@ -47,7 +50,7 @@ export default function Chat() {
     };
   }, []);
 
-  // Scroll when message is updated 
+  // Scroll when message is updated
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
@@ -58,27 +61,35 @@ export default function Chat() {
 
     try {
       // Start real-time update subscription
-      const subscription = await surrealDB.subscribeToMessages((message: ChatMessage) => {
-        setMessages(prev => [...prev, message]);
-      });
+      const subscription = await surrealDB.subscribeToMessages(
+        (message: ChatMessage) => {
+          setMessages((prev) => [...prev, message]);
+        },
+      );
       subscriptionRef.current = subscription;
       setIsJoined(true);
     } catch (error) {
-      console.error('Failed to join chat:', error instanceof Error ? error.message : String(error));
+      console.error(
+        "Failed to join chat:",
+        error instanceof Error ? error.message : String(error),
+      );
     }
   };
 
   // Send message
   const sendMessage = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!newMessage.trim() || !isJoined || !isConnected) return;
 
     try {
       await surrealDB.sendMessage(username, newMessage.trim());
-      setNewMessage('');
+      setNewMessage("");
     } catch (error) {
-      console.error('Failed to send message:', error instanceof Error ? error.message : String(error));
+      console.error(
+        "Failed to send message:",
+        error instanceof Error ? error.message : String(error),
+      );
     }
   };
 
@@ -100,11 +111,19 @@ export default function Chat() {
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-center bg-white p-8 rounded-lg shadow-md">
           <div className="text-red-500 text-6xl mb-4">⚠️</div>
-          <h2 className="text-2xl font-bold text-gray-800 mb-2">Connection Error</h2>
-          <p className="text-gray-600 mb-4">Unable to connect to SurrealDB server.</p>
+          <h2 className="text-2xl font-bold text-gray-800 mb-2">
+            Connection Error
+          </h2>
+          <p className="text-gray-600 mb-4">
+            Unable to connect to SurrealDB server.
+          </p>
           <p className="text-sm text-gray-500">
-            Make sure the Docker container is running:<br/>
-            <code className="bg-gray-100 px-2 py-1 rounded">docker run --rm -p 8000:8000 surrealdb/surrealdb:latest start --user root --pass root</code>
+            Make sure the Docker container is running:
+            <br />
+            <code className="bg-gray-100 px-2 py-1 rounded">
+              docker run --rm -p 8000:8000 surrealdb/surrealdb:latest start
+              --user root --pass root
+            </code>
           </p>
         </div>
       </div>
@@ -119,9 +138,17 @@ export default function Chat() {
           <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
             📱 Real-time chat using SurrealDB
           </h1>
-          <form onSubmit={(e) => { e.preventDefault(); joinChat(); }}>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              joinChat();
+            }}
+          >
             <div className="mb-4">
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
                 Please enter your user name
               </label>
               <input
@@ -158,7 +185,8 @@ export default function Chat() {
           </h1>
           <div className="flex items-center space-x-4">
             <span className="text-sm text-gray-600">
-              Welcome, <span className="font-medium text-blue-600">{username}</span>-san
+              Welcome,{" "}
+              <span className="font-medium text-blue-600">{username}</span>-san
             </span>
             <div className="flex items-center">
               <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
@@ -178,16 +206,20 @@ export default function Chat() {
         ) : (
           messages.map((message, index) => (
             <div
-              key={message.id ? message.id.toString() : `${message.username}-${message.timestamp}-${index}`}
+              key={
+                message.id
+                  ? message.id.toString()
+                  : `${message.username}-${message.timestamp}-${index}`
+              }
               className={`flex ${
-                message.username === username ? 'justify-end' : 'justify-start'
+                message.username === username ? "justify-end" : "justify-start"
               }`}
             >
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                   message.username === username
-                    ? 'bg-blue-500 text-white'
-                    : 'bg-white text-gray-800 shadow-sm'
+                    ? "bg-blue-500 text-white"
+                    : "bg-white text-gray-800 shadow-sm"
                 }`}
               >
                 {message.username !== username && (
@@ -198,12 +230,14 @@ export default function Chat() {
                 <p className="break-words">{message.message}</p>
                 <p
                   className={`text-xs mt-1 ${
-                    message.username === username ? 'text-blue-100' : 'text-gray-400'
+                    message.username === username
+                      ? "text-blue-100"
+                      : "text-gray-400"
                   }`}
                 >
-                  {new Date(message.timestamp).toLocaleTimeString('ja-JP', {
-                    hour: '2-digit',
-                    minute: '2-digit'
+                  {new Date(message.timestamp).toLocaleTimeString("ja-JP", {
+                    hour: "2-digit",
+                    minute: "2-digit",
                   })}
                 </p>
               </div>
