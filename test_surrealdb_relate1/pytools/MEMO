@@ -1,0 +1,5 @@
+pip install surrealdb
+
+
+# ubuntu
+pip3 install surrealdb  --break-system-packages

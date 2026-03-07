@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  surreal-db-streaming:
+    image: surrealdb/surrealdb:v2.0.0-beta.1
+    container_name: surreal-db-streaming
+    entrypoint: 
+      - /surreal 
+      - start
+      - --user
+      - ${DB_USER}
+      - --pass
+      - ${DB_PASSWORD}
+      - surrealkv:data/streaming-surreal
+    volumes:
+      - /host/path/to/surrealdb:/data
+    ports:
+      - 14831:8000
+    restart: unless-stopped
