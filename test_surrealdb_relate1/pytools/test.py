@@ -102,7 +102,17 @@ if False:
 
 if True:
    result = db.query("SELECT * FROM users")
-   print(">>>")
+   print("users >>>")
+   pprint.pprint(result)
+
+if True:
+   result = db.query("SELECT * FROM posts")
+   print("posts >>>")
+   pprint.pprint(result)
+
+if True:
+   result = db.query("SELECT * FROM likes")
+   print("likes >>>")
    pprint.pprint(result)
 
 if False:
