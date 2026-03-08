@@ -34,6 +34,21 @@ def table_shema():
    print("_________________")
    print("")
 
+def table_delete():
+   print("___ TABLE DELETE ___")
+   print("")
+   db_info = db.query("INFO FOR DB;")
+   #pprint.pprint(dbinfo)
+   #pprint.pprint(db_info['tables'])
+   for key in db_info['tables']:
+       #print('')
+       #print(key)
+       print("\033[35m" + key + "\033[0m")
+       table_info = db.query("REMOVE TABLE " + key )
+       #pprint.pprint(table_info)
+   print("_________________")
+   print("")
+
 def q(surql):
    result = db.query(surql)
    print("")
@@ -46,6 +61,12 @@ def p(surql):
    print(">> " + "\033[32m" + surql + "\033[0m")
 
    pprint.pprint(result)
+
+
+table_delete()
+
+table_shema()
+print("-----------------------")
 
 
 q("""
@@ -67,7 +88,9 @@ RELATE player:jack -> wants_to_buy -> armor:dragon;
 RELATE player:jack -> wants_to_buy -> armor:platemail;
 """)
 
+print("-----------------------")
 table_shema()
+print("-----------------------")
 p("SELECT name, email, age FROM users;");
 p("SELECT name, content  FROM posts;");
 p("SELECT *  FROM likes;");

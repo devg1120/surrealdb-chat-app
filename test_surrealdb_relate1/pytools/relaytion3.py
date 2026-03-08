@@ -76,7 +76,7 @@ if F:
     q("RELATE person:aristotle -> wrote -> article:on_sleep_and_sleeplessness;")
     p("SELECT * FROM wrote;")
 
-if F:
+if T:
     h("BASIC")
     q("""
     CREATE person:aristotle, article:on_sleep_and_sleeplessness;
