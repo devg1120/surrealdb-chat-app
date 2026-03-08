@@ -62,7 +62,7 @@ function  App() {
     { id:3, name: "memo", email: "devg1120@gmail.com", age:20},
   ];
 
-  console.log(users);
+  //console.log(users);
   //console.log(users_);
 
 
@@ -75,6 +75,41 @@ function  App() {
       }
   }
   sub();
+
+  const table_fields_dump = ( table_info ) => {
+     console.log(table_info)
+     for ( let k in  table_info[0].fields) {
+        //console.log(table_info[0].fields[k]);
+        let fields_name = table_info[0].fields[k].split(' ')[2];
+        let fields_type = table_info[0].fields[k].split(' ')[6];
+	console.log("   -", fields_name, fields_type)
+     }
+
+
+  }
+  const db_tables_dump = async ( db_info ) => {
+     console.log(db_info)
+     for ( let k in  db_info[0].tables) {
+        //console.log(db_[0].tables[k])
+        let table_name = db_info[0].tables[k].split(' ')[2];
+	console.log(table_name)
+        const query = 'INFO FOR TABLE ' + table_name  + ' ;' 
+	//console.log(query)
+        const table_info = await db.query(query)
+        table_fields_dump( table_info )
+     }
+  }
+
+  const handleDump = async ()=> {
+     //console.log(await db.query(` INFO FOR ROOT;`) );
+     //console.log(await db.query(` INFO FOR NS;`) );
+     //console.log(await db.query(` INFO FOR DB;`) );
+     
+     const db_info = await db.query(` INFO FOR DB;`) ;
+     db_tables_dump( db_info );
+
+  }
+
 
   const handleCreate = async ()=> {
     //alert('You clicked me!');
@@ -122,6 +157,8 @@ function  App() {
   const handleDeleteAll = async ()=> {
     const users = new Table('users');
     let user = await db.delete(users)
+    const posts = new Table('posts');
+    await db.delete(posts)
     setUpdate(0);
     console.log("++++++++++")
   }
@@ -130,13 +167,29 @@ function  App() {
      const users = await db.insert([
        { id: new RecordId('posts', '1'), name: 'Bob' , content: 'content............'},
       ])
-  const edge = await db.relate(
-    new RecordId('users', 'bob'),
-    new Table('likes'),
-    new RecordId('posts', '1')
-  ).unique();
+      const edge = await db.relate(
+        new RecordId('users', 'bob'),
+        new Table('likes'),
+        new RecordId('posts', '1')
+      ).unique();
+      console.log("edge", edge);
+  }
+
+  const handlePost2 = async ()=> {
+     const users = await db.insert([
+       { id: new RecordId('posts', '2'), name: 'Bob' , content: 'content............2'},
+      ])
+     const edge = await db.query(`
+     RELATE users:bob->likes->posts:1
+         SET 
+     		metadata.time_written = time::now(),
+     		metadata.location = "Tallinn";
+     `);
+      console.log("edge", edge);
 
   }
+
+
   return (
     <>
     {/*
@@ -175,7 +228,13 @@ function  App() {
 </div>
 <div>
     <button onClick={handlePost}>
-      post
+      post1
+    </button>
+    <button onClick={handlePost2}>
+      post2
+    </button>
+    <button onClick={handleDump}>
+      dump
     </button>
 </div>
 
